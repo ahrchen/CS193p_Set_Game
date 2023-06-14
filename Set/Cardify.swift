@@ -8,12 +8,17 @@
 import SwiftUI
 
 struct Cardify: ViewModifier {
+    let card: RegularSetGame.Card
     
     func body(content: Content) -> some View {
         ZStack {
             let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
             shape.fill(.white)
-            shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
+            shape.strokeBorder(
+                card.isSelected ?.blue : card.failedToMatch ? .red : card.isMatched ? .green : .black,
+                lineWidth: DrawingConstants.lineWidth
+            )
+            
             content.opacity(1)
         }
     }
@@ -25,14 +30,14 @@ struct Cardify: ViewModifier {
 }
 
 extension View {
-    func cardify() -> some View {
-        return self.modifier(Cardify())
+    func cardify(card: RegularSetGame.Card) -> some View {
+        return self.modifier(Cardify(card: card))
     }
 }
 
 struct Cardify_Previews: PreviewProvider {
     static var previews: some View {
         Text("🗿")
-            .modifier(Cardify())
+            .modifier(Cardify(card: RegularSetGame.Card(shape: .diamond, color: .green, numShapeSeen: .one, shading: .open, id: 1)))
     }
 }

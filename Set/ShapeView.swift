@@ -8,46 +8,48 @@
 import SwiftUI
 
 struct ShapeView: View {
+    @Environment(\.accessibilityDifferentiateWithoutColor) var differentiateWithoutColor
     let card: RegularSetGame.Card
     
     var body: some View {
+        let cardColor = differentiateWithoutColor && card.color == .green ? .blue : card.color
         switch card.shape {
         case .diamond:
             switch card.shading {
                 case .solid:
                     Diamond()
-                    .fill(card.color)
+                    .fill(cardColor)
                 case .open:
                     Diamond()
-                    .stroke(card.color)
+                    .stroke(cardColor)
                 case .striped:
                     Diamond()
-                    .fill(stripedColor(color: card.color))
+                    .fill(stripedColor(color: cardColor))
             }
            
         case .squiggle:
             switch card.shading {
                 case .solid:
                     Squiggle()
-                    .fill(card.color)
+                    .fill(cardColor)
                 case .open:
                     Squiggle()
-                    .stroke(card.color)
+                    .stroke(cardColor)
                 case .striped:
                     Squiggle()
-                    .fill(stripedColor(color: card.color))
+                    .fill(stripedColor(color: cardColor))
             }
         case .oval:
             switch card.shading {
                 case .solid:
                     Oval(cornerRadius: 5)
-                    .fill(card.color)
+                    .fill(cardColor)
                 case .open:
                     Oval(cornerRadius: 5)
-                    .stroke(card.color)
+                    .stroke(cardColor)
                 case .striped:
                     Oval(cornerRadius: 5)
-                    .fill(stripedColor(color: card.color))
+                    .fill(stripedColor(color: cardColor))
             }
         }
     }
