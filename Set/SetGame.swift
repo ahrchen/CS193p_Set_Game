@@ -94,10 +94,6 @@ struct SetGame<CardColor, CardShape, CardNums, CardShading> where CardNums: Equa
                 selectedCards.remove(at: i)
             }
         }
-        
-        if cards.count < 12 {
-            addThreeCards()
-        }
     }
     
     mutating func dealThreeCards() {
@@ -112,7 +108,7 @@ struct SetGame<CardColor, CardShape, CardNums, CardShading> where CardNums: Equa
         addThreeCards()
     }
         
-    mutating private func addThreeCards() {
+    private mutating func addThreeCards() {
         if deck.count >= 3 {
             for _ in 0..<3 {
                 cards.append(deck.removeLast())
