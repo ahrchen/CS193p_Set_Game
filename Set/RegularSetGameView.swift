@@ -20,6 +20,10 @@ struct RegularSetGameView: View {
                     game.choose(card)
                 }
         }
+        HStack {
+            deckBody
+            discardBody
+        }
         PlayerView(game: game, player: 2)
         Divider()
         HStack {
@@ -37,7 +41,42 @@ struct RegularSetGameView: View {
             }
         }
         .padding(5)
-        
+    }
+    
+    // Deck body
+    var deckBody: some View {
+        ZStack {
+            ForEach(game.cards.filter(isUndealt)) { card in
+                CardView(card: card)
+            }
+        }
+        .frame(width: CardConstants.undealtWidth, height: CardConstants.undealtHeight)
+    }
+    
+    // Discard body
+    var discardBody: some View {
+        ZStack {
+            ForEach(game.cards.filter({card in card.isMatched})) { card in
+                CardView(card: card)
+            }
+        }
+        .frame(width: CardConstants.undealtWidth, height: CardConstants.undealtHeight)
+    }
+    
+    private struct CardConstants {
+        static let aspectRatio: CGFloat = 2/3
+        static let undealtWidth = undealtHeight * aspectRatio
+        static let undealtHeight: CGFloat = 90
+    }
+    
+    @State private var dealt = Set<Int>()
+    
+    private func deal(_ card: RegularSetGame.Card) {
+        dealt.insert(card.id)
+    }
+    
+    private func isUndealt(_ card: RegularSetGame.Card) -> Bool {
+        !dealt.contains(card.id)
     }
 }
 
