@@ -13,13 +13,7 @@ struct RegularSetGameView: View {
     
     var body: some View {
         PlayerView(game: game, player: 1)
-        AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
-            CardView(card: card)
-                .padding(2)
-                .onTapGesture {
-                    game.choose(card)
-                }
-        }
+        gameBody
         HStack {
             deckBody
             discardBody
@@ -41,6 +35,16 @@ struct RegularSetGameView: View {
             }
         }
         .padding(5)
+    }
+    
+    var gameBody: some View {
+        AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
+            CardView(card: card)
+                .padding(2)
+                .onTapGesture {
+                    game.choose(card)
+                }
+        }
     }
     
     // Deck body
