@@ -20,6 +20,11 @@ struct RegularSetGameView: View {
         }
         PlayerView(game: game, player: 2)
         Divider()
+        controlsBody
+        .padding(5)
+    }
+    
+    var controlsBody: some View {
         HStack {
             Button("Deal 3 More Cards") {
             game.addThreeCards()
@@ -34,7 +39,6 @@ struct RegularSetGameView: View {
                 game.cheat()
             }
         }
-        .padding(5)
     }
     
     var gameBody: some View {
