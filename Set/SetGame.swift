@@ -111,7 +111,9 @@ struct SetGame<CardColor, CardShape, CardNums, CardShading> where CardNums: Equa
     private mutating func addThreeCards() {
         if deck.count >= 3 {
             for _ in 0..<3 {
-                cards.append(deck.removeLast())
+                var dealtCard = deck.removeLast()
+                dealtCard.isDealt = true
+                cards.append(dealtCard)
             }
         }
     }
@@ -198,15 +200,15 @@ struct SetGame<CardColor, CardShape, CardNums, CardShading> where CardNums: Equa
             }
         }
         deck.shuffle()
-        for _ in 0..<12 {
-            let card = deck.removeLast()
-            cards.append(card)
+        while cards.count < 12 {
+            addThreeCards()
         }
     }
     
     struct Card: Identifiable {
         var isMatched = false
         var isSelected = false
+        var isDealt = false
         var failedToMatch = false
         let shape: CardShape
         let color: CardColor

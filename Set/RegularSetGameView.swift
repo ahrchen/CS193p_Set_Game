@@ -54,7 +54,7 @@ struct RegularSetGameView: View {
     // Deck body
     var deckBody: some View {
         ZStack {
-            ForEach(game.cards.filter(isUndealt)) { card in
+            ForEach(game.deck) { card in
                 CardView(card: card)
             }
         }
@@ -77,16 +77,6 @@ struct RegularSetGameView: View {
         static let undealtWidth = undealtHeight * aspectRatio
         static let undealtHeight: CGFloat = 90
         static let color = Color.purple
-    }
-    
-    @State private var dealt = Set<Int>()
-    
-    private func deal(_ card: RegularSetGame.Card) {
-        dealt.insert(card.id)
-    }
-    
-    func isUndealt(_ card: RegularSetGame.Card) -> Bool {
-        !dealt.contains(card.id)
     }
 }
 
@@ -134,7 +124,7 @@ struct CardView: View {
                 }
             }
         }
-        .cardify(card: card, isDealt: false)
+        .cardify(card: card)
         
     }
     
