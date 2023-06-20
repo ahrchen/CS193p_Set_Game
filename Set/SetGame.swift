@@ -11,6 +11,7 @@ struct SetGame<CardColor, CardShape, CardNums, CardShading> where CardNums: Equa
     
     private(set) var cards: Array<Card>
     private(set) var deck: Array<Card>
+    private(set) var discardPile: Array<Card>
     private(set) var player1Score: Int = 0
     private(set) var player2Score: Int = 0
     private(set) var selectedPlayer: Int = 0
@@ -83,11 +84,14 @@ struct SetGame<CardColor, CardShape, CardNums, CardShading> where CardNums: Equa
     }
     
     mutating func refresh() {
-        self.cards.removeAll(where: { card in
-            card.isMatched
-        })
-        cards.indices.forEach { cards[$0].failedToMatch = false}
-        
+        cards.indices.forEach {
+            cards[$0].failedToMatch = false
+            if cards[$0].isMatched {
+                discardPile.append(cards[$0])
+            }
+        }
+        cards.removeAll(where: {card in card.isMatched})
+
         // Remove invalid selected card indexes
         for i in 0..<selectedCards.count {
             if selectedCards[i] >= cards.count {
@@ -101,11 +105,8 @@ struct SetGame<CardColor, CardShape, CardNums, CardShading> where CardNums: Equa
             updateScore(player: selectedPlayer, by: -1)
         }
         
-        self.cards.removeAll(where: { card in
-            card.isMatched
-        })
-        cards.indices.forEach { cards[$0].failedToMatch = false}
         addThreeCards()
+        refresh()
     }
         
     private mutating func addThreeCards() {
@@ -119,10 +120,6 @@ struct SetGame<CardColor, CardShape, CardNums, CardShading> where CardNums: Equa
     }
     
     mutating func cheat() {
-        self.cards.removeAll(where: { card in
-            card.isMatched
-        })
-        
         for i in 0..<cards.count - 2 {
             for j in 0 ..< cards.count - 1 {
                 for k in 0 ..< cards.count {
@@ -187,6 +184,7 @@ struct SetGame<CardColor, CardShape, CardNums, CardShading> where CardNums: Equa
     init(numColors: Int, numShapes: Int, numTimes: Int, numShades: Int,  createCardContent: (Int, Int, Int, Int) -> (CardColor, CardShape, CardNums, CardShading)) {
         deck = []
         cards = []
+        discardPile = []
         var myCounter = 0
         for i in 0..<numShapes {
             for j in 0..<numShades {
@@ -205,7 +203,7 @@ struct SetGame<CardColor, CardShape, CardNums, CardShading> where CardNums: Equa
         }
     }
     
-    struct Card: Identifiable {
+    struct Card: Identifiable, Equatable {
         var isMatched = false
         var isSelected = false
         var isDealt = false

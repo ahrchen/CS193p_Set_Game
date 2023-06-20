@@ -11,6 +11,8 @@ struct RegularSetGameView: View {
     
     @ObservedObject var game: RegularSetGame
     
+    @Namespace private var discardingNamespace
+    
     var body: some View {
         PlayerView(game: game, player: 1)
         gameBody
@@ -26,10 +28,7 @@ struct RegularSetGameView: View {
     
     var controlsBody: some View {
         HStack {
-            Button("Deal 3 More Cards") {
-            game.addThreeCards()
-            }
-            .disabled(game.deck.isEmpty)
+            
             Spacer()
             Button("New Game") {
                 game.newGame()
@@ -44,9 +43,13 @@ struct RegularSetGameView: View {
     var gameBody: some View {
         AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
             CardView(card: card)
+                .matchedGeometryEffect(id: card.id, in: discardingNamespace)
                 .padding(2)
+                .transition(AnyTransition.asymmetric(insertion: .identity, removal: .identity))
                 .onTapGesture {
-                    game.choose(card)
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        game.choose(card)
+                    }
                 }
         }
     }
@@ -60,16 +63,23 @@ struct RegularSetGameView: View {
         }
         .frame(width: CardConstants.undealtWidth, height: CardConstants.undealtHeight)
         .foregroundColor(CardConstants.color)
+        .onTapGesture {
+            game.dealThreeCards()
+        }
+        .disabled(game.deck.isEmpty)
     }
     
     // Discard body
     var discardBody: some View {
         ZStack {
-            ForEach(game.cards.filter({card in card.isMatched})) { card in
+            ForEach(game.discardPile) { card in
                 CardView(card: card)
-            }
+                    .matchedGeometryEffect(id: card.id, in: discardingNamespace)
+                    .transition(AnyTransition.asymmetric(insertion: .identity, removal: .identity))
+                }
         }
         .frame(width: CardConstants.undealtWidth, height: CardConstants.undealtHeight)
+        .animation(.easeInOut(duration: 1), value: game.discardPile)
     }
     
     private struct CardConstants {

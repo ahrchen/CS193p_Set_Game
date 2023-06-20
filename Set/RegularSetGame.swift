@@ -34,13 +34,16 @@ class RegularSetGame: ObservableObject {
         return model.deck
     }
     
+    var discardPile: Array<Card> {
+        return model.discardPile
+    }
     // MARK: - Intents(s)
     
     func choose(_ card: Card) {
         model.choose(card)
     }
     
-    func addThreeCards() {
+    func dealThreeCards() {
         model.dealThreeCards()
     }
     
