@@ -9,17 +9,22 @@ import SwiftUI
 
 struct Cardify: ViewModifier {
     let card: RegularSetGame.Card
+    var isDealt: Bool
     
     func body(content: Content) -> some View {
         ZStack {
             let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
-            shape.fill(.white)
-            shape.strokeBorder(
-                card.isSelected ?.blue : card.failedToMatch ? .red : card.isMatched ? .green : .black,
-                lineWidth: DrawingConstants.lineWidth
-            )
+            if isDealt {
+                shape.fill().foregroundColor(.white)
+                shape.strokeBorder(
+                    card.isSelected ?.blue : card.failedToMatch ? .red : card.isMatched ? .green : .black,
+                    lineWidth: DrawingConstants.lineWidth
+                )
+            } else {
+                shape.fill()
+            }
             
-            content.opacity(1)
+            content.opacity(isDealt ? 1 : 0)
         }
     }
     
@@ -30,14 +35,14 @@ struct Cardify: ViewModifier {
 }
 
 extension View {
-    func cardify(card: RegularSetGame.Card) -> some View {
-        return self.modifier(Cardify(card: card))
+    func cardify(card: RegularSetGame.Card, isDealt: Bool) -> some View {
+        return self.modifier(Cardify(card: card, isDealt: isDealt))
     }
 }
 
 struct Cardify_Previews: PreviewProvider {
     static var previews: some View {
         Text("🗿")
-            .modifier(Cardify(card: RegularSetGame.Card(shape: .diamond, color: .green, numShapeSeen: .one, shading: .open, id: 1)))
+            .modifier(Cardify(card: RegularSetGame.Card(shape: .diamond, color: .green, numShapeSeen: .one, shading: .open, id: 1), isDealt: true))
     }
 }

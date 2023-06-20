@@ -59,6 +59,7 @@ struct RegularSetGameView: View {
             }
         }
         .frame(width: CardConstants.undealtWidth, height: CardConstants.undealtHeight)
+        .foregroundColor(CardConstants.color)
     }
     
     // Discard body
@@ -75,6 +76,7 @@ struct RegularSetGameView: View {
         static let aspectRatio: CGFloat = 2/3
         static let undealtWidth = undealtHeight * aspectRatio
         static let undealtHeight: CGFloat = 90
+        static let color = Color.purple
     }
     
     @State private var dealt = Set<Int>()
@@ -83,7 +85,7 @@ struct RegularSetGameView: View {
         dealt.insert(card.id)
     }
     
-    private func isUndealt(_ card: RegularSetGame.Card) -> Bool {
+    func isUndealt(_ card: RegularSetGame.Card) -> Bool {
         !dealt.contains(card.id)
     }
 }
@@ -132,7 +134,7 @@ struct CardView: View {
                 }
             }
         }
-        .cardify(card: card)
+        .cardify(card: card, isDealt: false)
         
     }
     
