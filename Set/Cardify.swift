@@ -22,7 +22,6 @@ struct Cardify: ViewModifier {
             } else {
                 shape.fill()
             }
-
             content.opacity(card.isDealt ? 1 : 0)
         }
     }

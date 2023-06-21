@@ -12,6 +12,7 @@ struct RegularSetGameView: View {
     @ObservedObject var game: RegularSetGame
     
     @Namespace private var discardingNamespace
+    @Namespace private var dealingNamespace
     
     var body: some View {
         PlayerView(game: game, player: 1)
@@ -43,9 +44,11 @@ struct RegularSetGameView: View {
     var gameBody: some View {
         AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
             CardView(card: card)
-                .matchedGeometryEffect(id: card.id, in: discardingNamespace)
                 .padding(2)
+                .matchedGeometryEffect(id: card.id, in: discardingNamespace)
+                .matchedGeometryEffect(id: card.id, in: dealingNamespace)
                 .transition(AnyTransition.asymmetric(insertion: .identity, removal: .identity))
+                .zIndex(zIndex(of: card))
                 .onTapGesture {
                     withAnimation(.easeInOut(duration: 0.5)) {
                         game.choose(card)
@@ -59,14 +62,23 @@ struct RegularSetGameView: View {
         ZStack {
             ForEach(game.deck) { card in
                 CardView(card: card)
+                    .matchedGeometryEffect(id: card.id, in: dealingNamespace)
+                    .transition(AnyTransition.asymmetric(insertion: .identity, removal: .identity))
+                    
             }
         }
         .frame(width: CardConstants.undealtWidth, height: CardConstants.undealtHeight)
         .foregroundColor(CardConstants.color)
         .onTapGesture {
-            game.dealThreeCards()
+            withAnimation(.easeInOut(duration: 1)){
+                game.dealThreeCards()
+            }
         }
         .disabled(game.deck.isEmpty)
+    }
+    
+    private func zIndex(of card: RegularSetGame.Card) -> Double {
+        -Double(game.deck.firstIndex(where: { $0.id == card.id }) ?? 0)
     }
     
     // Discard body
@@ -87,6 +99,7 @@ struct RegularSetGameView: View {
         static let undealtWidth = undealtHeight * aspectRatio
         static let undealtHeight: CGFloat = 90
         static let color = Color.purple
+        static let dealDuration: Double = 1
     }
 }
 
