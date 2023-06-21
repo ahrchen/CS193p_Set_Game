@@ -21,16 +21,16 @@ struct RegularSetGameView: View {
             deckBody
             discardBody
         }
+        .onAppear(perform: game.newGame)
         PlayerView(game: game, player: 2)
         Divider()
         controlsBody
         .padding(5)
     }
+        
     
     var controlsBody: some View {
         HStack {
-            
-            Spacer()
             Button("New Game") {
                 game.newGame()
             }
@@ -55,6 +55,7 @@ struct RegularSetGameView: View {
                     }
                 }
         }
+        .animation(.easeInOut(duration: 2), value: game.deck)
     }
     
     // Deck body

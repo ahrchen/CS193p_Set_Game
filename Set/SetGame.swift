@@ -139,6 +139,9 @@ struct SetGame<CardColor, CardShape, CardNums, CardShading> where CardNums: Equa
     }
     
     private func isSetAvailable() -> Bool {
+        guard !cards.isEmpty else {
+            return false 
+        }
         for i in 0..<cards.count - 2 {
             for j in 0 ..< cards.count - 1 {
                 for k in 0 ..< cards.count {
@@ -198,9 +201,6 @@ struct SetGame<CardColor, CardShape, CardNums, CardShading> where CardNums: Equa
             }
         }
         deck.shuffle()
-        while cards.count < 12 {
-            addThreeCards()
-        }
     }
     
     struct Card: Identifiable, Equatable {

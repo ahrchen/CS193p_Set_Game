@@ -66,6 +66,9 @@ class RegularSetGame: ObservableObject {
     
     func newGame() {
         model = RegularSetGame.createSetGame()
+        while model.cards.count < 12 {
+            model.dealThreeCards()
+        }
     }
     
     func cheat() {
