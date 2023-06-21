@@ -109,7 +109,7 @@ struct SetGame<CardColor, CardShape, CardNums, CardShading> where CardNums: Equa
         refresh()
     }
         
-    private mutating func addThreeCards() {
+    mutating func addThreeCards() {
         if deck.count >= 3 {
             for _ in 0..<3 {
                 var dealtCard = deck.removeLast()

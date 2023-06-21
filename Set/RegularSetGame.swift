@@ -95,6 +95,10 @@ class RegularSetGame: ObservableObject {
         model.timer
     }
     
+    func addThreeCards() {
+        model.addThreeCards()
+    }
+    
     func refresh() {
         model.refresh()
     }

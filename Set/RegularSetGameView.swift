@@ -57,9 +57,18 @@ struct RegularSetGameView: View {
                     withAnimation(.easeInOut(duration: 0.5)) {
                         game.choose(card)
                     }
+                    if game.cards.contains(where: {card in
+                        card.isMatched
+                    }) {
+                        withAnimation(.easeInOut(duration: CardConstants.dealDuration).delay(0.5)) {
+                            game.addThreeCards()
+                        }
+                        withAnimation(.easeInOut(duration: CardConstants.dealDuration)) {
+                            game.refresh()
+                        }
+                    }
                 }
         }
-        .animation(.easeInOut(duration: CardConstants.dealDuration), value: game.deck)
         .animation(.easeInOut(duration: CardConstants.dealDuration), value: game.discardPile)
         
     }
