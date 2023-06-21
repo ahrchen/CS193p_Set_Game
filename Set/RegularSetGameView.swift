@@ -16,14 +16,17 @@ struct RegularSetGameView: View {
     
     var body: some View {
         PlayerView(game: game, player: 1)
+        Divider()
         gameBody
         HStack {
             deckBody
+            Spacer()
             discardBody
+                
         }
         .onAppear(perform: game.newGame)
-        PlayerView(game: game, player: 2)
         Divider()
+        PlayerView(game: game, player: 2)
         controlsBody
         .padding(5)
     }
@@ -37,6 +40,7 @@ struct RegularSetGameView: View {
             Spacer()
             Button("Cheat") {
                 game.cheat()
+                game.refresh()
             }
         }
     }
@@ -56,6 +60,8 @@ struct RegularSetGameView: View {
                 }
         }
         .animation(.easeInOut(duration: CardConstants.dealDuration), value: game.deck)
+        .animation(.easeInOut(duration: CardConstants.dealDuration), value: game.discardPile)
+        
     }
     
     // Deck body
@@ -76,6 +82,7 @@ struct RegularSetGameView: View {
             }
         }
         .disabled(game.deck.isEmpty)
+        .padding(15)
     }
     
     private func zIndex(of card: RegularSetGame.Card) -> Double {
@@ -89,10 +96,12 @@ struct RegularSetGameView: View {
                 CardView(card: card)
                     .matchedGeometryEffect(id: card.id, in: discardingNamespace)
                     .transition(AnyTransition.asymmetric(insertion: .identity, removal: .identity))
+                    .offset(x: CGFloat(Double(card.id) * 0.15), y: CGFloat(Double(card.id) * 0.15))
                 }
         }
         .frame(width: CardConstants.undealtWidth, height: CardConstants.undealtHeight)
         .animation(.easeInOut(duration: 1), value: game.discardPile)
+        .padding(15)
     }
     
     private struct CardConstants {

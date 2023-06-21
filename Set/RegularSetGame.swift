@@ -94,6 +94,10 @@ class RegularSetGame: ObservableObject {
     func getTimer() -> Publishers.Autoconnect<Timer.TimerPublisher> {
         model.timer
     }
+    
+    func refresh() {
+        model.refresh()
+    }
 }
 
 enum Shading: Equatable {
