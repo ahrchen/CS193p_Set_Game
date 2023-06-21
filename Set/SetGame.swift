@@ -47,7 +47,6 @@ struct SetGame<CardColor, CardShape, CardNums, CardShading> where CardNums: Equa
     mutating func choose(_ card: Card) {
         if selectedPlayer > 0, let chosenIndex = cards.firstIndex(where: {$0.id == card.id}),
            !cards[chosenIndex].isMatched{
-            refresh()
             guard let firstPotentialMatchIndex = selectedCards.first else {
                 selectedCards.append(chosenIndex)
                 return
@@ -97,6 +96,10 @@ struct SetGame<CardColor, CardShape, CardNums, CardShading> where CardNums: Equa
             if selectedCards[i] >= cards.count {
                 selectedCards.remove(at: i)
             }
+        }
+        
+        if selectedCards.count <= 2 {
+            selectedCards.removeAll()
         }
     }
     
