@@ -55,7 +55,7 @@ struct RegularSetGameView: View {
                     }
                 }
         }
-        .animation(.easeInOut(duration: 2), value: game.deck)
+        .animation(.easeInOut(duration: CardConstants.dealDuration), value: game.deck)
     }
     
     // Deck body
@@ -65,13 +65,13 @@ struct RegularSetGameView: View {
                 CardView(card: card)
                     .matchedGeometryEffect(id: card.id, in: dealingNamespace)
                     .transition(AnyTransition.asymmetric(insertion: .identity, removal: .identity))
-                    
+                    .offset(x: CGFloat(Double(card.id) * 0.25), y: CGFloat(Double(card.id) * 0.25))
             }
         }
         .frame(width: CardConstants.undealtWidth, height: CardConstants.undealtHeight)
         .foregroundColor(CardConstants.color)
         .onTapGesture {
-            withAnimation(.easeInOut(duration: 1)){
+            withAnimation(.easeInOut(duration: CardConstants.dealDuration)){
                 game.dealThreeCards()
             }
         }

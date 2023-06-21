@@ -21,6 +21,8 @@ struct Cardify: ViewModifier {
                 )
             } else {
                 shape.fill()
+                shape.strokeBorder(.black,
+            lineWidth: DrawingConstants.lineWidth)
             }
             content.opacity(card.isDealt ? 1 : 0)
         }
