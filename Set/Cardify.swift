@@ -7,13 +7,25 @@
 
 import SwiftUI
 
-struct Cardify: ViewModifier {
+struct Cardify: AnimatableModifier {
     let card: RegularSetGame.Card
+    
+    init(card: RegularSetGame.Card) {
+        rotation = card.isDealt ? 0 : 180
+        self.card = card
+    }
+    
+    var animatableData: Double {
+        get { rotation }
+        set { rotation = newValue }
+    }
+    
+    var rotation: Double
     
     func body(content: Content) -> some View {
         ZStack {
             let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
-            if card.isDealt {
+            if rotation < 90 {
                 shape.fill(.white)
                 shape.strokeBorder(
                     card.isSelected ?.blue : card.failedToMatch ? .red : card.isMatched ? .green : .black,
@@ -24,8 +36,9 @@ struct Cardify: ViewModifier {
                 shape.strokeBorder(.black,
             lineWidth: DrawingConstants.lineWidth)
             }
-            content.opacity(card.isDealt ? 1 : 0)
+            content.opacity(rotation < 90 ? 1 : 0)
         }
+        .rotation3DEffect(Angle.degrees(rotation), axis: (0,1,0))
     }
     
     private struct DrawingConstants {

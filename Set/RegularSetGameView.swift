@@ -52,7 +52,6 @@ struct RegularSetGameView: View {
                 .matchedGeometryEffect(id: card.id, in: discardingNamespace)
                 .matchedGeometryEffect(id: card.id, in: dealingNamespace)
                 .transition(AnyTransition.asymmetric(insertion: .identity, removal: .identity))
-                .zIndex(zIndex(of: card))
                 .onTapGesture {
                     withAnimation(.easeInOut(duration: 0.5)) {
                         game.choose(card)
@@ -87,8 +86,15 @@ struct RegularSetGameView: View {
         .foregroundColor(CardConstants.color)
         .onTapGesture {
             withAnimation(.easeInOut(duration: CardConstants.dealDuration)){
-                game.dealThreeCards()
+                game.flipThreeDeckCard()
             }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                withAnimation(.easeInOut(duration: CardConstants.dealDuration)) {
+                    game.addThreeCards()
+                }
+             }
+
+            
         }
         .disabled(game.deck.isEmpty)
         .padding(15)
@@ -167,7 +173,6 @@ struct CardView: View {
             }
         }
         .cardify(card: card)
-        
     }
     
     private struct DrawingConstants {

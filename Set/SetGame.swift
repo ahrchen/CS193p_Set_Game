@@ -122,6 +122,14 @@ struct SetGame<CardColor, CardShape, CardNums, CardShading> where CardNums: Equa
         }
     }
     
+    mutating func flipThreeDeckCard() {
+        if deck.count >= 3 {
+            deck[deck.count - 1].isDealt = true
+            deck[deck.count - 2].isDealt = true
+            deck[deck.count - 3].isDealt = true
+        }
+    }
+    
     mutating func cheat() {
         for i in 0..<cards.count - 2 {
             for j in 0 ..< cards.count - 1 {

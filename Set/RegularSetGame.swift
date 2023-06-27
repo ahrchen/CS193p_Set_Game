@@ -47,6 +47,10 @@ class RegularSetGame: ObservableObject {
         model.dealThreeCards()
     }
     
+    func flipThreeDeckCard() {
+        model.flipThreeDeckCard()
+    }
+    
     func getPlayerScore(_ player: Int) -> Int {
         if player == 1{
             return model.player1Score
